@@ -42,9 +42,7 @@ docker compose up --build
 - FunASR 服务地址填 `http://127.0.0.1:8000`
 - FunASR 模型按需选择：`sensevoice`、`paraformer`、`paraformer-en`、`fun-asr-nano`
 - 默认开启「切换/开始录音时自动启动 FunASR 服务」
-- 自动启动默认命令为 `D:/dsh/FunASR/.venv/Scripts/python.exe server.py --model sensevoice --device cpu --port 8000`
-- 默认工作目录已指向 `D:/dsh/FunASR/examples/openai_api`
-- 如果不是这个目录，或想用 Docker/其他脚本启动，可在设置里修改启动命令和工作目录
+- 已默认目录，如果不是这个目录，或想用 Docker/其他脚本启动，可在设置里修改启动命令和工作目录
 - 不想让插件自动拉起进程时，取消「自动启动」即可，插件只连接你手动启动的服务
 
 ### 服务生命周期
@@ -125,25 +123,6 @@ pnpm typecheck    # tsc --noEmit
 - FunASR 本地质量取决于所选模型；CPU 可以跑，GPU 能显著降低延迟
 - 识别语言由模型自动检测，不再需要手动选择语言
 
-## 故障排查
-
-### 识别结果恒为空（服务端日志出现 `empty speech`）
-
-这表示送到识别服务的是**纯静音**音频。按以下顺序排查：
-
-1. 看界面提示。若弹出「没有录到任何声音」，说明浏览器录到的采样几乎全零，问题在采集侧而不是识别服务：
-   - 系统麦克风是否被其他程序独占（会议软件、录音工具）；
-   - Windows「声音 → 输入」里选的设备是否正确；
-   - DSH 是否拿到了麦克风权限。
-2. 若提示是「无法连接本地 FunASR 服务」，检查 `~/.dsh/speech-input-funasr.log`——插件自动拉起服务时的完整输出（含启动命令与工作目录）都记在这里。
-3. 确认服务本身可用（应返回识别文本而不是空串）：
-
-```bash
-curl -X POST http://127.0.0.1:8000/v1/audio/transcriptions \
-  -F "file=@sample.wav" -F "model=sensevoice"
-```
-
-静音判定阈值是归一化峰值 `0.001`（16-bit 下约 ±33），只在音频几乎全零时触发；实测人声衰减 37 倍仍能正常转写，不会误杀小声说话。
 
 ### 其它已知行为
 
