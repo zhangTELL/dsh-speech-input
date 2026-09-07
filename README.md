@@ -54,34 +54,6 @@ docker compose up --build
 - 插件停用（DSH 退出）时会回收自己拉起的进程，不再残留后台进程
 - 自动退出生效范围：**只回收插件自己启动的服务**。手动启动的服务插件拿不到 pid，不会去动它
 
-### 标点符号
-
-**FunASR 是否自动加标点，取决于 `server.py` 里 `MODEL_CONFIGS` 有没有配 `punc_model`，插件侧无法控制。**
-
-SenseVoice 本身只输出裸文本（无标点）。官方 `server.py` 默认只给 `paraformer` 配了 `punc_model`，`sensevoice` 没配 —— 而插件默认用的就是 `sensevoice`，所以不加标点。
-
-修复方法：编辑 `FunASR/examples/openai_api/server.py`，给 sensevoice 补上标点模型：
-
-```python
-"sensevoice": {
-    "model": "iic/SenseVoiceSmall",
-    "vad_model": "fsmn-vad",
-    "vad_kwargs": {"max_single_segment_time": 30000},
-    "punc_model": "ct-punc",   # ← 加这一行
-},
-```
-
-改完**必须重启 FunASR 服务**（模型在启动时加载，热改配置不生效）。首次启动会下载 `ct-punc`。
-
-实测对照（同一段音频）：
-
-| 配置 | 输出 |
-|---|---|
-| sensevoice（无 punc） | `甚至出现交易几乎停滞的` |
-| sensevoice + ct-punc | `甚至出现交易几乎停滞的。` |
-| paraformer + ct-punc | `甚至出现交易几乎停滞的。` |
-
-注意：`ct-punc` 是中文标点模型，中文和中英混说效果好；纯英文/日文场景下标点会明显变差。想要回退到无标点输出，删掉那行 `punc_model` 并重启即可。
 
 ### 方式二：智谱云端（可选）
 
