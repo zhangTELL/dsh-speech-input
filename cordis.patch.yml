@@ -1,0 +1,5 @@
+# dsh-speech-input bundle patch: mounts the plugin into a profile layer
+# stack (same pattern as dsh-task-board / dsh-ssh).
+- insert:
+    - id: speech-input
+      name: '@dsh-local/dsh-speech-input'

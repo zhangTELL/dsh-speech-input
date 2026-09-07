@@ -1,0 +1,61 @@
+{
+  "name": "@dsh-local/dsh-speech-input",
+  "version": "0.1.0",
+  "description": "语音输入插件（STT）：DSH Web GUI 聊天输入框右下角新增「语音」按钮（麦克风），点击录音后支持本机 FunASR 离线转写（默认）或智谱 GLM-ASR 云端转写，自动把识别文本填入输入框；支持追加/替换两种插入模式和长按空格说话。",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime"
+      ],
+      "platform": "web"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-client-runtime": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-client-ui-primitives": "^0.1.0-rc.6",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-client-ui-slots": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-settings": "^0.1.0-rc.6",
+    "@deepseek-ai/dsh-system-prompt": "^0.1.0-rc.6",
+    "@types/react": "~18.3.31",
+    "@types/react-dom": "^18.3.5",
+    "schemastery": "^3.18.0",
+    "tsdown": "^0.22.14",
+    "typescript": "~5.9.3"
+  },
+  "files": [
+    "lib",
+    "src",
+    "cordis.patch.yml"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "watch": "tsdown --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhangTELL/dsh-speech-input"
+  }
+}
