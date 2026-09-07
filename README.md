@@ -16,7 +16,7 @@ DSH Web GUI 聊天输入框右下角新增「语音」按钮（麦克风）：�
 
 ## 使用场景
 
-### 方式一：本地 **[FunASR](https://github.com/modelscope/FunASR)**（推荐，离线/隐私优先）
+### 方式一：本地 **[FunASR](https://github.com/modelscope/FunASR)**
 
 FunASR 官方提供 OpenAI 兼容 API，插件通过 DSH 宿主代理把浏览器录到的 WAV 转发到本地服务，因此浏览器不需要处理 CORS，音频也不会上传到云端。
 
